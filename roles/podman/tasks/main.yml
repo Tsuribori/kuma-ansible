@@ -1,0 +1,7 @@
+---
+
+- name: "Install podman"
+  become: yes
+  package:
+    name: podman
+    state: latest

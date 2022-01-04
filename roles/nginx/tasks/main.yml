@@ -1,39 +1,48 @@
 ---
 
-- name: apt public key for nginx
-  apt_key:
-    keyserver: keyserver.ubuntu.com
-    id: 561F9B9CAC40B2F7
-    state: present
-
 - name: install nginx
-  apt:
-    pkg:
-      - nginx
-    update_cache: yes
+  become: yes
+  package:
+    name: nginx
+    state: latest
 
 - name: ensure nginx service is enabled
+  become: yes
   service:
     name: nginx
     enabled: yes
 
 - name: remove default nginx site
+  become: yes
   file:
     path: /etc/nginx/sites-enabled/default
     state: absent
   notify: restart nginx
 
 - name: add rate limiting
+  become: yes
   copy:
     dest: /etc/nginx/conf.d/metabase-rate-limit.conf
     content: |
       limit_req_zone $binary_remote_addr zone=one:10m rate=5r/s;
   notify: restart nginx
 
+- name: set conf location
+  set_fact:
+    nginx_conf_subdir: sites-enabled
+  when: ansible_facts['os_family'] == "Debian"
+
+- name: upgrade all packages
+  set_fact:
+    nginx_conf_subdir: conf.d
+  when: ansible_facts['os_family'] == "RedHat"
+
+
 - name: create nginx kuma.conf
+  become: yes
   template:
     src: kuma.conf.j2
-    dest: /etc/nginx/sites-enabled/kuma.conf
+    dest: "/etc/nginx/{{ nginx_conf_subdir }}/kuma.conf"
     owner: root
     group: root
     mode: '0644'

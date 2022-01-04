@@ -1,19 +1,22 @@
 ---
 # tasks file for init_container
 
-- name: upgrade all packages in container
+- name: upgrade all packages
+  become: yes
   apt:
     update_cache: yes
     upgrade: yes
     autoremove: yes
-  when: ansible_distribution == 'Ubuntu'
+  when: ansible_facts['os_family'] == "Debian"
 
-- name: upgrade all packages in container
-  yum:
+- name: upgrade all packages
+  become: yes
+  dnf:
     name: '*'
     state: 'latest'
-  when: ansible_distribution == 'Centos'
+  when: ansible_facts['os_family'] == "RedHat"
 
 - name: set machine timezone to "{{ timezone }}"
+  become: yes
   timezone:
     name: "{{ timezone }}"
