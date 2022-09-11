@@ -8,10 +8,11 @@ Ansible >= 2.8
 
 ## Quick start
 
-- Create a clean Rocky Linux 8 or Ubuntu 20.04 server
+- Create a clean RHEL 8 or 9 server
 - Run `ansible-galaxy install -r requirements.yaml`
 - Run the playbook
 
 ## Platforms tested
 
--  Rocky Linux 8.5
+- Rocky Linux 8.5
+- AlmaLinux 9

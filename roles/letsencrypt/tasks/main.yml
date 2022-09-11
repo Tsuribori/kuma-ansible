@@ -1,12 +1,5 @@
 ---
 
-- name: install certbot package
-  become: yes
-  package:
-    name: python3-certbot-nginx
-    state: latest
-  when: ansible_facts['os_family'] == "Debian"
-
 - name: install certbot package - install epel
   become: yes
   dnf:

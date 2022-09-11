@@ -27,22 +27,11 @@
       limit_req_zone $binary_remote_addr zone=one:10m rate=5r/s;
   notify: restart nginx
 
-- name: set conf location
-  set_fact:
-    nginx_conf_subdir: sites-enabled
-  when: ansible_facts['os_family'] == "Debian"
-
-- name: upgrade all packages
-  set_fact:
-    nginx_conf_subdir: conf.d
-  when: ansible_facts['os_family'] == "RedHat"
-
-
 - name: create nginx kuma.conf
   become: yes
   template:
     src: kuma.conf.j2
-    dest: "/etc/nginx/{{ nginx_conf_subdir }}/kuma.conf"
+    dest: "/etc/nginx/conf.d/kuma.conf"
     owner: root
     group: root
     mode: '0644'
