@@ -1,0 +1,39 @@
+---
+
+- name: "Install firewalld requirements"
+  become: yes
+  dnf:
+    name: "{{ item }}"
+    state: latest
+  loop:
+    - firewalld
+    - python-firewall
+  
+- name: "Allow SSH"
+  become: yes
+  firewalld:
+    service: ssh
+    permanent: yes
+    state: enabled
+
+- name: "Allow HTTP"
+  become: yes
+  firewalld:
+    service: http
+    permanent: yes
+    state: enabled
+
+- name: "Allow HTTPS"
+  become: yes
+  firewalld:
+    service: https
+    permanent: yes
+    state: enabled
+
+- name: "Enable and start firewalld service"
+  vars:
+    pipelining: false
+  service:
+    name: firewalld
+    state: started
+    enabled: yes

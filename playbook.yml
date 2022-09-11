@@ -9,3 +9,4 @@
     - role: kuma
     - role: nginx
     - role: letsencrypt
+    - role: firewall
