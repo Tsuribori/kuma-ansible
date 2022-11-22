@@ -2,6 +2,7 @@
 # tasks file for metabase
 
 - name: Create the kuma container
+  become: yes
   containers.podman.podman_container:
     name: kuma
     image: docker.io/louislam/uptime-kuma
