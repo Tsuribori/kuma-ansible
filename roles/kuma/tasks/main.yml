@@ -5,7 +5,7 @@
   containers.podman.podman_container:
     name: kuma
     image: docker.io/louislam/uptime-kuma
-    restart: yes
+    recreate: yes
     ports:
       - "3001:3001"
     restart_policy: always
