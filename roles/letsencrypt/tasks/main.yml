@@ -28,10 +28,6 @@
   become: yes
   # use -v to debug
   shell: "certbot --non-interactive --preferred-challenges http --agree-tos --email {{ letsencrypt_admin_email }} --nginx -d {{ domain }}"
-  args:
-    creates: "/etc/letsencrypt/live/{{ domain }}/fullchain.pem;"
-  when: not letsencrypt_cert.stat.exists
-# note. certbot creates automaticaly a cron entry with this file: /etc/cron.d/certbot
 
 - name: set certificate permissions
   become: yes
@@ -42,4 +38,9 @@
     group: nginx
     mode: 0755
   notify: restart nginx
-  when: not letsencrypt_cert.stat.exists
+
+- name: Enable certbot-renew timer
+  become: yes
+  systemd:
+    name: certbot-renew
+    state: started
